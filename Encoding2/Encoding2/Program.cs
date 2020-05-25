@@ -29,6 +29,25 @@ namespace Server
             numberOfBytes);
 
             Console.WriteLine(converted);
+
+           // client.Close();
+
+
+            TcpClient client1 = new TcpClient();
+
+            IPAddress ip1 = IPAddress.Parse("172.16.114.206");
+            IPEndPoint endPoint1 = new IPEndPoint(ip1, port);
+            client1.Connect(endPoint1);
+
+            NetworkStream stream1 = client1.GetStream();
+
+            string text = "Det virkede!!!!!!!!!!";
+
+            byte[] buffer1 = Encoding.UTF8.GetBytes(text);
+
+            stream1.Write(buffer1, 0, buffer1.Length);
+
+            //client1.Close();
         }
     }
 }
