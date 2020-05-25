@@ -7,9 +7,9 @@ namespace Encoding1
     {
         public static void Main(string[] args)
         {
-            string message = "Hej med dig";
+            string message = "Hej med dig, håber det går godt";
 
-            byte[] bytes = Encoding.ASCII.GetBytes(message);
+            byte[] bytes = Encoding.UTF8.GetBytes(message);
 
             foreach (var b in bytes)
             {
