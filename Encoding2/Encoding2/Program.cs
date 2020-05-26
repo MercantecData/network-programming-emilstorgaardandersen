@@ -10,16 +10,15 @@ namespace Server
         public static void Main(string[] args)
         {
             int port = 5002;
-
             bool running = true;
+
+            menu();
+
             while(running) {
-                Console.WriteLine("\n\n\nVil du være server eller client");
-                Console.WriteLine("Skriv 1 for at være server");
-                Console.WriteLine("Skriv 2 for at være client");
-                Console.WriteLine("Skriv 3 for at lukke programmet");
-
                 string input = Console.ReadLine();
-
+                Console.Clear();
+                menu();
+                
                 if (input == "1")
                 {
                     serverFunc(port);
@@ -38,7 +37,6 @@ namespace Server
                 }
             }
         }
-
         static void serverFunc(int port)
         {
             // receives message from client
@@ -103,9 +101,9 @@ namespace Server
 
             // Receives message from server
             IPAddress ip1 = IPAddress.Any;
-            IPEndPoint endpoint = new IPEndPoint(ip1, port);
+            IPEndPoint endpoint1 = new IPEndPoint(ip1, port);
 
-            TcpListener listener = new TcpListener(endpoint);
+            TcpListener listener = new TcpListener(endpoint1);
             listener.Start();
 
             TcpClient client1 = listener.AcceptTcpClient();
@@ -122,6 +120,14 @@ namespace Server
             Console.WriteLine(converted);
 
             listener.Stop();
+        }
+
+        static void menu()
+        {
+            Console.WriteLine("Vil du være server eller client");
+            Console.WriteLine("Skriv 1 for at være server");
+            Console.WriteLine("Skriv 2 for at være client");
+            Console.WriteLine("Skriv 3 for at lukke programmet");
         }
     }
 }
