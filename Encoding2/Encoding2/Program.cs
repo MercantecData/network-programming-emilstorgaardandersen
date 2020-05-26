@@ -27,11 +27,9 @@ namespace CallResponse
                 }
                 else if (input == "2")
                 {
-                    Console.WriteLine("Skriv serverens ip adresse");
-                    string serverIP = Console.ReadLine();
                     while (true)
                     {
-                        clientFunc(port, serverIP);
+                        clientFunc(port);
                     }
                 }
                 else if (input == "3")
@@ -68,22 +66,28 @@ namespace CallResponse
             }
         }
 
-        static void clientFunc(int port, string serverIP)
+        static void clientFunc(int port)
         {
-            // Connects to server
-            TcpClient client = connect(serverIP, port);
+            Console.WriteLine("Skriv serverens ip adresse");
+            string serverIP = Console.ReadLine();
 
-            Console.WriteLine("Skriv din besked");
-            string text = Console.ReadLine();
+            while (true)
+            {
+                // Connects to server
+                TcpClient client = connect(serverIP, port);
 
-            // Send message to server
-            sendMessage(text, client);
+                Console.WriteLine("Skriv din besked");
+                string text = Console.ReadLine();
 
-            // Start listener
-            TcpListener listener = StartListener(port);
+                // Send message to server
+                sendMessage(text, client);
 
-            // Get message from server
-            getMessageFromStream(listener);
+                // Start listener
+                TcpListener listener = StartListener(port);
+
+                // Get message from server
+                getMessageFromStream(listener);
+            }
         }
 
         static void menu()
