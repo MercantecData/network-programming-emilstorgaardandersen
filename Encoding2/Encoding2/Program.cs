@@ -15,18 +15,24 @@ namespace CallResponse
 
             menu();
 
-            while(running) {
+            while (running)
+            {
                 string input = Console.ReadLine();
                 Console.Clear();
                 menu();
-                
+
                 if (input == "1")
                 {
-                    serverFunc(port);
+                        serverFunc(port);
                 }
                 else if (input == "2")
                 {
-                    clientFunc(port);
+                    Console.WriteLine("Skriv serverens ip adresse");
+                    string serverIP = Console.ReadLine();
+                    while (true)
+                    {
+                        clientFunc(port, serverIP);
+                    }
                 }
                 else if (input == "3")
                 {
@@ -42,28 +48,28 @@ namespace CallResponse
         }
         static void serverFunc(int port)
         {
-            // Starts listener
-            TcpListener listener = StartListener(port);
+            while (true)
+            {
+                // Starts listener
+                TcpListener listener = StartListener(port);
 
-            Console.WriteLine("Awaiting Clients...");
+                Console.WriteLine("Awaiting Clients...");
 
-            // Gets message from client
-            getMessageFromStream(listener);
+                // Gets message from client
+                getMessageFromStream(listener);
 
-            // Connects to client
-            TcpClient client = connect("172.16.114.206", port);
+                // Connects to client
+                TcpClient client = connect("172.16.114.206", port);
 
-            string text = "Det virkede!!!!!!!!!!";
+                string text = "Det virkede!!!!!!!!!!";
 
-            //Send response message to client
-            sendMessage(text, client);
+                //Send response message to client
+                sendMessage(text, client);
+            }
         }
 
-        static void clientFunc(int port)
-       {
-            Console.WriteLine("Skriv serverens ip adresse");
-            string serverIP = Console.ReadLine();
-
+        static void clientFunc(int port, string serverIP)
+        {
             // Connects to server
             TcpClient client = connect(serverIP, port);
 
@@ -78,7 +84,7 @@ namespace CallResponse
 
             // Get message from server
             getMessageFromStream(listener);
-       }
+        }
 
         static void menu()
         {
