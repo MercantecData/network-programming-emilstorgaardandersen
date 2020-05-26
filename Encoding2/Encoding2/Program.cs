@@ -9,6 +9,8 @@ namespace Server
     {
         public static void Main(string[] args)
         {
+            int port = 5002;
+
             bool running = true;
             while(running) {
                 Console.WriteLine("\n\n\nVil du være server eller client");
@@ -20,11 +22,11 @@ namespace Server
 
                 if (input == "1")
                 {
-                    serverFunc();
+                    serverFunc(port);
                 }
                 else if (input == "2")
                 {
-                    clientFunc();
+                    clientFunc(port);
                 }
                 else if (input == "3")
                 {
@@ -37,10 +39,9 @@ namespace Server
             }
         }
 
-        static void serverFunc()
+        static void serverFunc(int port)
         {
             // receives message from client
-            int port = 5002;
             IPAddress ip = IPAddress.Any;
             IPEndPoint endpoint = new IPEndPoint(ip, port);
 
@@ -79,10 +80,9 @@ namespace Server
             stream1.Write(buffer1, 0, buffer1.Length);
         }
 
-        static void clientFunc()
+        static void clientFunc(int port)
         {
             // Sends message to server
-            int port = 5002;
             TcpClient client = new TcpClient();
 
             Console.WriteLine("Skriv serverens ip adresse");
