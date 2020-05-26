@@ -39,6 +39,7 @@ namespace Server
 
         static void serverFunc()
         {
+            // receives message from client
             int port = 5002;
             IPAddress ip = IPAddress.Any;
             IPEndPoint endpoint = new IPEndPoint(ip, port);
@@ -60,11 +61,27 @@ namespace Server
 
             Console.WriteLine(converted);
 
-            // client.Close();
+            listener.Stop();
+
+            // Returns message to client
+            TcpClient client1 = new TcpClient();
+
+            IPAddress ip1 = IPAddress.Parse("172.16.114.206");
+            IPEndPoint endPoint1 = new IPEndPoint(ip1, port);
+            client1.Connect(endPoint1);
+
+            NetworkStream stream1 = client1.GetStream();
+
+            string text = "Det virkede!!!!!!!!!!";
+
+            byte[] buffer1 = Encoding.UTF8.GetBytes(text);
+
+            stream1.Write(buffer1, 0, buffer1.Length);
         }
 
         static void clientFunc()
         {
+            // Sends message to server
             int port = 5002;
             TcpClient client = new TcpClient();
 
@@ -83,7 +100,28 @@ namespace Server
 
             stream.Write(buffer, 0, buffer.Length);
 
-            //client1.Close();
+
+            // Receives message from server
+            IPAddress ip1 = IPAddress.Any;
+            IPEndPoint endpoint = new IPEndPoint(ip1, port);
+
+            TcpListener listener = new TcpListener(endpoint);
+            listener.Start();
+
+            TcpClient client1 = listener.AcceptTcpClient();
+
+            NetworkStream stream1 = client1.GetStream();
+
+            byte[] buffer1 = new byte[255];
+
+            int numberOfBytes = stream1.Read(buffer1, 0, 255);
+
+            string converted = Encoding.UTF8.GetString(buffer1, 0,
+            numberOfBytes);
+
+            Console.WriteLine(converted);
+
+            listener.Stop();
         }
     }
 }
