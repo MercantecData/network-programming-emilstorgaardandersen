@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -8,21 +9,20 @@ namespace Async
 {
     public class Server
     {
+        public List<TcpClient> clients = new List<TcpClient>();
         public Server(int port)
         {
             TcpListener listener = StartListener(port);
 
             Console.WriteLine("Awaiting Clients...");
-            TcpClient client = listener.AcceptTcpClient();
 
-            NetworkStream stream = client.GetStream();
-            ReceiveMessage(stream);
+            AcceptClients(listener);
 
             while (true)
             {
                 Console.Write("Write your message here: ");
                 string text = Console.ReadLine();
-                SendMessage(text, stream);
+                SendMessage(text, clients);
             }
 
             //Console.ReadKey();
@@ -35,11 +35,11 @@ namespace Async
 
             while (true)
             {
-                int numberOfBytesRead = await stream.ReadAsync(buffer, 0, 256);
+                int numberOfBytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                 string receivedMessage = Encoding.UTF8.GetString(buffer, 0, numberOfBytesRead);
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("\n" + receivedMessage);
+                Console.Write("\nClient writes: " + receivedMessage);
                 Console.ResetColor();
             }
         }
@@ -53,10 +53,26 @@ namespace Async
             return listener;
         }
 
-        static void SendMessage(string text, NetworkStream stream)
+        static void SendMessage(string text, List<TcpClient> clients)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(text);
-            stream.Write(buffer, 0, buffer.Length);
+            foreach (TcpClient client in clients)
+            {
+                client.GetStream().Write(buffer, 0, buffer.Length);
+            }
+        }
+
+        public async void AcceptClients(TcpListener listener)
+        {
+            bool isRunning = true;
+
+            while (isRunning)
+            {
+                TcpClient client = await listener.AcceptTcpClientAsync();
+                clients.Add(client);
+                NetworkStream stream = client.GetStream();
+                ReceiveMessage(stream);
+            }
         }
     }
 }
