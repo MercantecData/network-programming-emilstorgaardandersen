@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Async", "Async\Async.csproj", "{2FBBEE14-E5B7-407C-8473-E9AC0B6C1A1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|anycpu = Debug|anycpu
+		Release|anycpu = Release|anycpu
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FBBEE14-E5B7-407C-8473-E9AC0B6C1A1B}.Debug|anycpu.ActiveCfg = Debug|anycpu
+		{2FBBEE14-E5B7-407C-8473-E9AC0B6C1A1B}.Debug|anycpu.Build.0 = Debug|anycpu
+		{2FBBEE14-E5B7-407C-8473-E9AC0B6C1A1B}.Release|anycpu.ActiveCfg = Release|anycpu
+		{2FBBEE14-E5B7-407C-8473-E9AC0B6C1A1B}.Release|anycpu.Build.0 = Release|anycpu
+	EndGlobalSection
+EndGlobal
