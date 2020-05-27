@@ -31,7 +31,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
-    <Compile Include="EmptyClass.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Client.cs" />
   </ItemGroup>
