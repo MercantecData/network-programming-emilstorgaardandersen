@@ -9,14 +9,20 @@ namespace UDP
     {
         public Client(string serverIP)
         {
+            Sender(serverIP);
+        }
+
+        public static async void Sender(string serverIP)
+        {
             UdpClient client = new UdpClient();
 
-            string text = "Hello UDP!";
+            Console.Write("Write your message here: ");
+            string text = Console.ReadLine();
             byte[] bytes = Encoding.UTF8.GetBytes(text);
 
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(serverIP), 1234);
 
-            client.Send(bytes, bytes.Length, endpoint);
+            await client.SendAsync(bytes, bytes.Length, endpoint);
         }
     }
 }
