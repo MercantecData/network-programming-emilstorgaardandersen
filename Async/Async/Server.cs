@@ -57,9 +57,7 @@ namespace Async
         {
             byte[] buffer = Encoding.UTF8.GetBytes(text);
             foreach (TcpClient client in clients)
-            {
                 client.GetStream().Write(buffer, 0, buffer.Length);
-            }
         }
 
         public async void AcceptClients(TcpListener listener)

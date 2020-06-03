@@ -39,7 +39,7 @@ namespace Async
                 string receivedMessage = Encoding.UTF8.GetString(buffer, 0, numberOfBytesRead);
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("\n" + receivedMessage);
+                Console.Write("\nServer writes: " + receivedMessage);
                 Console.ResetColor();
             }
         }
