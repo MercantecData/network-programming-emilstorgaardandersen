@@ -7,6 +7,8 @@ namespace Encoding2
 {
     public class Server
     {
+        // The server can only reseive one message from the client.
+
         public Server(int port)
         {
             while (true)
