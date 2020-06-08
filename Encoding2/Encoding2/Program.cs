@@ -7,15 +7,22 @@ namespace Encoding2
         public static void Main(string[] args)
         {
             Console.WriteLine("Hvilken port??");
+            // Gets port from console
             int port = Convert.ToInt32(Console.ReadLine());
             bool running = true;
 
+            // Prints the menu
             Menu();
 
             while (running)
             {
+                // Gets input from console
                 string input = Console.ReadLine();
+
+                // Clear console
                 Console.Clear();
+
+                // Prints the menu
                 Menu();
 
                 if (input == "1")
@@ -35,8 +42,9 @@ namespace Encoding2
                 }
                 else
                 {
+                    // If none of the numbers from the menu, has been choosed
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Du skulle skrive 1 eller 2!!!!!!!!!");
+                    Console.WriteLine("Du skulle skrive 1, 2 eller 3!!!!!!!!!");
                     Console.ResetColor();
                 }
             }

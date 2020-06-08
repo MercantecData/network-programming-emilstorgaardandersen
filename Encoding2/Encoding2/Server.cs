@@ -17,55 +17,74 @@ namespace Encoding2
                 Console.WriteLine("Awaiting Clients...");
 
                 // Gets message from client
-                getMessageFromStream(listener);
+                GetMessageFromStream(listener);
 
                 // Connects to client
-                TcpClient client = connect("172.16.114.206", port);
+                TcpClient client = Connect("127.0.0.1", port); // Ervins ip "172.16.114.206"
 
                 string text = "Det virkede!!!!!!!!!!";
 
                 //Send response message to client
-                sendMessage(text, client);
+                SendMessage(text, client);
             }
         }
 
-        static TcpClient connect(string serverIP, int port)
+        static TcpClient Connect(string serverIP, int port)
         {
+            // Creates a client
             TcpClient client = new TcpClient();
+
+            // Creates an endpoint
             IPAddress ip = IPAddress.Parse(serverIP);
             IPEndPoint endPoint = new IPEndPoint(ip, port);
+
+            // Connects to client
             client.Connect(endPoint);
             return client;
         }
 
-        static void sendMessage(string text, TcpClient client)
+        static void SendMessage(string text, TcpClient client)
         {
+            // Creates stream
             NetworkStream stream = client.GetStream();
-            byte[] buffer = Encoding.UTF8.GetBytes(text);
+
+            // Creates buffer
+            byte[] buffer = Encoding.UTF8.GetBytes(text); // Usin UTF8
+
+            // Writes to stream
             stream.Write(buffer, 0, buffer.Length);
         }
 
         static TcpListener StartListener(int port)
         {
-            IPAddress ip1 = IPAddress.Any;
-            IPEndPoint endpoint1 = new IPEndPoint(ip1, port);
-            TcpListener listener = new TcpListener(endpoint1);
+            // Creates a listener, thats listens on every ip address, on the followering port
+            IPAddress ip = IPAddress.Any;
+            IPEndPoint endpoint = new IPEndPoint(ip, port);
+            TcpListener listener = new TcpListener(endpoint);
+
+            // Starts the listener
             listener.Start();
             return listener;
         }
 
-        static void getMessageFromStream(TcpListener listener)
+        static void GetMessageFromStream(TcpListener listener)
         {
-            TcpClient client1 = listener.AcceptTcpClient();
+            // Creates client
+            TcpClient client = listener.AcceptTcpClient();
 
-            NetworkStream stream1 = client1.GetStream();
-            byte[] buffer1 = new byte[255];
+            // Creates stream
+            NetworkStream stream = client.GetStream();
 
-            int numberOfBytes = stream1.Read(buffer1, 0, 255);
+            // Creates buffer
+            byte[] buffer = new byte[255];
 
-            string converted = Encoding.UTF8.GetString(buffer1, 0,
-            numberOfBytes);
+            // Gets number of bytes
+            int numberOfBytes = stream.Read(buffer, 0, 255);
 
+            // Converts message to string
+            string converted = Encoding.UTF8.GetString(buffer, 0, numberOfBytes);
+
+            // Prints the converted message, in green text
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(converted);
             Console.ResetColor();
