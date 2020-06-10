@@ -7,20 +7,31 @@ namespace UDP
 {
     public class Client
     {
-        public Client(string serverIP)
+        // Constructor
+        public Client(int port)
         {
-            Sender(serverIP);
+            Sender(port);
         }
 
-        public static async void Sender(string serverIP)
+        public static async void Sender(int port )
         {
+            // Gets servers ip adress
+            Console.WriteLine("Skriv serverens ip??");
+            string serverIP = Console.ReadLine();
+
+            // Creates client
             UdpClient client = new UdpClient();
 
             Console.Write("Write your message here: ");
+
+            // Gets message from client
             string text = Console.ReadLine();
+
+            // Converts message to bytes
             byte[] bytes = Encoding.UTF8.GetBytes(text);
 
-            IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(serverIP), 1234);
+            // Creates endpoint
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(serverIP), port);
 
             await client.SendAsync(bytes, bytes.Length, endpoint);
         }

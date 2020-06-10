@@ -6,27 +6,32 @@ namespace UDP
     {
         public static void Main(string[] args)
         {
+            // Gets port from console
             Console.WriteLine("Hvilken port??");
-            // int port = Convert.ToInt32(Console.ReadLine());
+            int port = Convert.ToInt32(Console.ReadLine());
             bool running = true;
 
+            // Shows menu
             Menu();
 
             while (running)
             {
+                // Waits for input from user
                 string input = Console.ReadLine();
+
+                // Clear console
                 Console.Clear();
+
+                // Shows menu
                 Menu();
 
                 if (input == "1")
                 {
-                    new Server();
+                    new Server(port);
                 }
                 else if (input == "2")
                 {
-                    Console.WriteLine("Skriv serverens ip??");
-                    string serverIP = Console.ReadLine();
-                    new Client(serverIP);
+                    new Client(port);
                 }
                 else if (input == "3")
                 {

@@ -7,21 +7,31 @@ namespace UDP
 {
     public class Server
     {
-        public Server()
+        // Constructor
+        public Server(int port)
         {
-            Receiver();
+            Receiver(port);
+
+            // Keeps application running
             Console.ReadLine();
         }
 
-        public static async void Receiver()
+        public static async void Receiver(int port)
         {
-            IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("0.0.0.0"), 1234);
+            Console.WriteLine("Awaiting Clients...");
+
+            // Creates endpoint 
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
+
+            // Creates client
             UdpClient client = new UdpClient(endpoint);
 
             UdpReceiveResult result = await client.ReceiveAsync();
 
+            // Gets byte array
             byte[] buffer = result.Buffer;
 
+            // Converts bytes to string
             string text = Encoding.UTF8.GetString(buffer);
 
             Console.WriteLine("Received: " + text);
