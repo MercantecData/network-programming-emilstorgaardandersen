@@ -7,15 +7,24 @@ namespace Async
         public static void Main(string[] args)
         {
             Console.WriteLine("Hvilken port??");
+
+            // Gets port from console
             int port = Convert.ToInt32(Console.ReadLine());
+
             bool running = true;
 
+            // Shows menu
             Menu();
 
             while (running)
             {
+                // Waits for input from user
                 string input = Console.ReadLine();
+
+                // Clear console
                 Console.Clear();
+
+                // Shows menu
                 Menu();
 
                 if (input == "1")
@@ -24,9 +33,7 @@ namespace Async
                 }
                 else if (input == "2")
                 {
-                    Console.WriteLine("Skriv serverens ip??");
-                    string serverIP = Console.ReadLine();
-                    new Client(port, serverIP);
+                    new Client(port);
                 }
                 else if (input == "3")
                 {
@@ -35,7 +42,7 @@ namespace Async
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Du skulle skrive 1 eller 2!!!!!!!!!");
+                    Console.WriteLine("Du skulle skrive 1, 2 eller 3!!!!!!!!!");
                     Console.ResetColor();
                 }
             }
