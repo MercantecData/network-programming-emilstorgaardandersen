@@ -7,16 +7,24 @@ namespace Async
         public static void Main(string[] args)
         {
             Console.WriteLine("Hvilken port??");
+
+            // Gets port from console
             int port = Convert.ToInt32(Console.ReadLine());
             bool running = true;
 
-            menu();
+            // Shows menu
+            Menu();
 
             while (running)
             {
+                // Waits for input from user
                 string input = Console.ReadLine();
+
+                // Clear console
                 Console.Clear();
-                menu();
+
+                // Shows menu
+                Menu();
 
                 if (input == "1")
                 {
@@ -41,7 +49,7 @@ namespace Async
             }
         }
 
-        static void menu()
+        static void Menu()
         {
             Console.WriteLine("Vil du være server eller client");
             Console.WriteLine("Skriv 1 for at være server");

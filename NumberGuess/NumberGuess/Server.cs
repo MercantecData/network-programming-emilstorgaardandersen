@@ -9,6 +9,7 @@ namespace Async
 {
     public class Server
     {
+        // Creates a list
         public List<TcpClient> clients = new List<TcpClient>();
         public Server(int port)
         {
@@ -16,115 +17,134 @@ namespace Async
 
             Console.WriteLine("Skriv to tal, som clienten skal gætte et random tal imellem");
 
+            // Waits for the first number
             Console.Write("Tal1: ");
             int firstNum = Convert.ToInt32(Console.ReadLine());
 
+            // Waits for the second number
             Console.Write("Tal2: ");
             int secondNum = Convert.ToInt32(Console.ReadLine());
 
-            int tal = random.Next(firstNum, secondNum);
+            // Creates a random number between the first number and the second number
+            int number = random.Next(firstNum, secondNum);
 
+            // Starts listener
             TcpListener listener = StartListener(port);
 
-            System.Console.WriteLine("The number is: " + tal);
+            // Letting the server know wich number the client is trying to guess
+            Console.WriteLine("The number is: " + number);
+
             Console.WriteLine("Awaiting Clients...");
 
-            AcceptClients(listener, tal, clients);
+            AcceptClients(listener, number, clients);
 
             string text = "Guess a number between " + firstNum + " and " + secondNum;
             SendMessage(text, clients);
 
             while (true)
             {
+                // Sends message to client
                 Console.Write("Write your message here: ");
                 string text1 = Console.ReadLine();
                 SendMessage(text1, clients);
             }
             //Console.ReadKey();
-            listener.Stop();
+            //listener.Stop();
         }
 
-        public async void ReceiveMessage(NetworkStream stream, int tal, List<TcpClient> clients)
+        public async void ReceiveMessage(NetworkStream stream, int number, List<TcpClient> clients)
         {
+            // Creates a buffer
             byte[] buffer = new byte[256];
 
             int value = 0;
-            int forsøg = 0;
-            int liv = 10;
+            int tries = 0;
+            int life = 10;
 
+            // Keeps reading message from client
             while (true)
             {
+                // Gets number of bytes
                 int numberOfBytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+
+                // Converts bytes to string
                 string receivedMessage = Encoding.UTF8.GetString(buffer, 0, numberOfBytesRead);
 
+                // Prints clients message/guess
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("\nClient guesses: " + receivedMessage);
                 Console.ResetColor();
 
-                if (liv != 0)
+                // If client hasnt lost all his lves
+                if (life != 0)
                 {
-                    // Tjek at brugeren skriver et tal
+                    // Check if user send a number
                     if (!int.TryParse(receivedMessage, out value))
                     {
-                        SendMessage("Du skal skrive et tal\n", clients);
+                        SendMessage("You have to right a number\n", clients);
                         continue;
                     }
 
-                    if (Convert.ToInt32(receivedMessage) == tal)
+                    // If client guessed the number
+                    if (Convert.ToInt32(receivedMessage) == number)
                     {
-                        forsøg++;
-                        System.Console.WriteLine("liv: " + liv);
-                        string text = "Du gættede rigtigt. Du brugte " + forsøg + " forsøg\n";
+                        tries++;
+                        Console.WriteLine("liv: " + life);
+                        string text = "Congratulations!!! You guessed the number. You used " + tries + " tries\n";
                         SendMessage(text, clients);
-                        Console.WriteLine("Clienten gættede rigtgt");
+                        Console.WriteLine("Client gues right");
                     }
-                    else if (Convert.ToInt32(receivedMessage) > tal)
+                    else if (Convert.ToInt32(receivedMessage) > number) // If client guessed too high
                     {
-                        forsøg++;
-                        liv--;
-                        System.Console.WriteLine("liv: " + liv);
-                        string text = "Du gættede for højt. Du har " + liv + " liv tilbage\n";
+                        tries++;
+                        life--;
+                        Console.WriteLine("liv: " + life);
+                        string text = "You guessed too high. You have " + life + " life left\n";
                         SendMessage(text, clients);
                     }
-                    else if (Convert.ToInt32(receivedMessage) < tal)
+                    else if (Convert.ToInt32(receivedMessage) < number) // If client guessed too low
                     {
-                        forsøg++;
-                        liv--;
-                        System.Console.WriteLine("liv: " + liv);
-                        string text = "Du gættede for lavt. Du har " + liv + " liv tilbage\n";
+                        tries++;
+                        life--;
+                        Console.WriteLine("liv: " + life);
+                        string text = "You guessed too low. You have " + life + " life lefr\n";
                         SendMessage(text, clients);
                     }
                 }
-                else
+                else // Else client ran out of lifes
                 {
-                    SendMessage("Du har ikke flere liv tilbage (DIN TABER)", clients);
+                    SendMessage("You have used all your lifes", clients);
                 }
             }
         }
 
         static TcpListener StartListener(int port)
         {
+            // Creates endpoint
             IPAddress ip1 = IPAddress.Any;
             IPEndPoint endpoint1 = new IPEndPoint(ip1, port);
             TcpListener listener = new TcpListener(endpoint1);
+
+            // Starts listener
             listener.Start();
             return listener;
         }
 
         static void SendMessage(string text, List<TcpClient> clients)
         {
+            // Converts text to bytes
             byte[] buffer = Encoding.UTF8.GetBytes(text);
             foreach (TcpClient client in clients)
             {
+                // Sends message to all clients
                 client.GetStream().Write(buffer, 0, buffer.Length);
             }
         }
 
         public async void AcceptClients(TcpListener listener, int tal, List<TcpClient> clients)
         {
-            bool isRunning = true;
-
-            while (isRunning)
+            // Keeps adding clients
+            while (true)
             {
                 TcpClient client = await listener.AcceptTcpClientAsync();
                 clients.Add(client);
